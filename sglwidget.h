@@ -24,6 +24,7 @@ private:
                                const QString& fragmentShaderPath );
     QGLShaderProgram m_shader;
     QGLBuffer m_vertexBuffer;
+    QGLBuffer m_colorBuffer;
 };
 
 #endif // SGLWIDGET_H
