@@ -20,9 +20,9 @@ void SGLWidget::initializeGL()
         return;
 
     // We need us some vertex data. Start simple with a triangle ;-)
-    float points[] = { -0.5f, -0.5f, 0.0f, 1.0f,
-                        0.5f, -0.5f, 0.0f, 1.0f,
-                        0.0f,  0.5f, 0.0f, 1.0f };
+    float points[] = { -1.0f, -1.0f, 0.0f, 1.0f,
+                        1.0f, -1.0f, 0.0f, 1.0f,
+                        0.0f,  1.0f, 0.0f, 1.0f };
     m_vertexBuffer.create();
     m_vertexBuffer.setUsagePattern( QGLBuffer::StaticDraw );
     if ( !m_vertexBuffer.bind() )
@@ -40,9 +40,17 @@ void SGLWidget::initializeGL()
         return;
     }
 
+    QMatrix4x4 projectionMatrix, viewMatrix, modelMatrix;
+    projectionMatrix.perspective(45, 4.0/3.0, 0.1f, 10.0f);
+    viewMatrix.lookAt(QVector3D(4, 3, 3), QVector3D(0, 0, 0), QVector3D(0,1,0));
+    modelMatrix.translate(1.0, 0, 0);
+    modelMatrix.scale(0.5);
     // Enable the "vertex" attribute to bind it to our currently bound
     // vertex buffer.
     m_shader.setAttributeBuffer( "vertex", GL_FLOAT, 0, 4 );
+    m_shader.setUniformValue("projectionMatrix", projectionMatrix);
+    m_shader.setUniformValue("viewMatrix", viewMatrix);
+    m_shader.setUniformValue("modelMatrix", modelMatrix);
     m_shader.enableAttributeArray( "vertex" );
 }
 
