@@ -7,10 +7,11 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     QGLFormat glFormat;
-    glFormat.setVersion( 3, 3 );
-    glFormat.setProfile( QGLFormat::CoreProfile ); // Requires >=Qt-4.8.0
+//    glFormat.setVersion( 3, 3 );
+//    glFormat.setProfile( QGLFormat::CoreProfile ); // Requires >=Qt-4.8.0
     glFormat.setSampleBuffers( true );
     sgl = new SGLWidget(glFormat);
+//    sgl = new SGLWidget();
     ui->vLayout->addWidget(sgl);
 }
 

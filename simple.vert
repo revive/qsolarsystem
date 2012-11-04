@@ -1,15 +1,15 @@
 #version 330
 
-in vec4 vertex;
-//layout(location = 0)
-in vec3 vertexColor;
+in vec3 vertex;
+
+in vec2 vertexUV;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
-out vec3 fragmentColor;
+out vec2 UV;
 
 void main(void)
 {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertex;
-    fragmentColor = vertexColor;
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex, 1.0);
+    UV = vertexUV;
 }

@@ -27,7 +27,8 @@ FORMS    += swidget.ui
 
 OTHER_FILES += \
     simple.vert \
-    simple.frag
+    simple.frag \
+    pic/t1.png
 
 RESOURCES += \
     resource.qrc

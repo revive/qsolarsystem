@@ -10,6 +10,7 @@ class SGLWidget : public QGLWidget
     Q_OBJECT
 public:
     explicit SGLWidget(const QGLFormat &format, QWidget *parent = 0);
+    explicit SGLWidget(QWidget *parent = 0);
     
 signals:
     
@@ -24,7 +25,8 @@ private:
                                const QString& fragmentShaderPath );
     QGLShaderProgram m_shader;
     QGLBuffer m_vertexBuffer;
-    QGLBuffer m_colorBuffer;
+    QGLBuffer m_uvBuffer;
+    GLuint m_texture;
 };
 
 #endif // SGLWIDGET_H
