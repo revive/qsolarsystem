@@ -17,18 +17,21 @@ TEMPLATE = app
 SOURCES += main.cpp\
         swidget.cpp \
     sglwidget.cpp \
-    ssphere3d.cpp
+    ssphere3d.cpp \
+    sutils.cpp
 
 HEADERS  += swidget.h \
     sglwidget.h \
-    ssphere3d.h
+    ssphere3d.h \
+    sutils.h
 
 FORMS    += swidget.ui
 
 OTHER_FILES += \
     simple.vert \
     simple.frag \
-    pic/t1.png
+    pic/t1.png \
+    model/sphere.obj
 
 RESOURCES += \
     resource.qrc

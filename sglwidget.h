@@ -5,6 +5,8 @@
 #include <QGLBuffer>
 #include <QGLShaderProgram>
 
+#include "ssphere3d.h"
+
 class SGLWidget : public QGLWidget
 {
     Q_OBJECT
@@ -27,6 +29,8 @@ private:
     QGLBuffer m_vertexBuffer;
     QGLBuffer m_uvBuffer;
     GLuint m_texture;
+
+    SSphere3D * s3d_0;
 };
 
 #endif // SGLWIDGET_H

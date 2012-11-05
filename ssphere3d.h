@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVector3D>
 #include <QColor>
+#include "sutils.h"
 
 class SSphere3D : public QObject
 {
@@ -11,10 +12,9 @@ class SSphere3D : public QObject
 public:
     explicit SSphere3D(QObject *parent = 0);
     ~SSphere3D();
-    void setColor(QColor c);
-    void setCenter(QVector3D & p);
-    void setRadius(double r);
     void draw() const;
+    bool loadPoints(const char * filename);
+    void dumpPoints();
 
 signals:
     
@@ -24,6 +24,7 @@ private:
     QVector3D center;
     double radius;
     QColor color;
+    NM_SUtils::Points points;
 };
 
 #endif // SSPHERE3D_H

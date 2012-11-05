@@ -4,14 +4,16 @@
 SGLWidget::SGLWidget(const QGLFormat &format, QWidget *parent) :
     QGLWidget(format, parent),
     m_vertexBuffer(QGLBuffer::VertexBuffer),
-    m_uvBuffer(QGLBuffer::VertexBuffer)
+    m_uvBuffer(QGLBuffer::VertexBuffer),
+    s3d_0(0)
 {
 }
 
 SGLWidget::SGLWidget(QWidget *parent) :
     QGLWidget(parent),
     m_vertexBuffer(QGLBuffer::VertexBuffer),
-    m_uvBuffer(QGLBuffer::VertexBuffer)
+    m_uvBuffer(QGLBuffer::VertexBuffer),
+    s3d_0(0)
 {
 }
 
@@ -23,7 +25,7 @@ void SGLWidget::initializeGL()
 
     glEnable(GL_DEPTH_TEST);
     // Set the clear color to black
-    glClearColor( 1.0f, 1.0f, 0.0f, 1.0f );
+    glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 
     // Prepare a complete shader program...
     if ( !prepareShaderProgram( ":/simple.vert", ":/simple.frag" ) )
@@ -36,39 +38,39 @@ void SGLWidget::initializeGL()
         -1.0f,-1.0f,-1.0f,
         -1.0f,-1.0f, 1.0f,
         -1.0f, 1.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,
+        1.0f, 1.0f,-1.0f,
         -1.0f,-1.0f,-1.0f,
         -1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f, 1.0f,
+        1.0f,-1.0f, 1.0f,
         -1.0f,-1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
+        1.0f,-1.0f,-1.0f,
+        1.0f, 1.0f,-1.0f,
+        1.0f,-1.0f,-1.0f,
         -1.0f,-1.0f,-1.0f,
         -1.0f,-1.0f,-1.0f,
         -1.0f, 1.0f, 1.0f,
         -1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f, 1.0f,
+        1.0f,-1.0f, 1.0f,
         -1.0f,-1.0f, 1.0f,
         -1.0f,-1.0f,-1.0f,
         -1.0f, 1.0f, 1.0f,
         -1.0f,-1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f, 1.0f,-1.0f,
-         1.0f,-1.0f,-1.0f,
-         1.0f, 1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
-         1.0f, 1.0f,-1.0f,
+        1.0f,-1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f,-1.0f,-1.0f,
+        1.0f, 1.0f,-1.0f,
+        1.0f,-1.0f,-1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f,-1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f,-1.0f,
         -1.0f, 1.0f,-1.0f,
-         1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
         -1.0f, 1.0f,-1.0f,
         -1.0f, 1.0f, 1.0f,
-         1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
         -1.0f, 1.0f, 1.0f,
-         1.0f,-1.0f, 1.0f
+        1.0f,-1.0f, 1.0f
     };
 
     // uv data come from the opengl tutorial.
@@ -153,6 +155,11 @@ void SGLWidget::initializeGL()
     m_shader.enableAttributeArray("vertexUV" );
     glBindTexture(GL_TEXTURE_2D, m_texture);
     m_shader.setUniformValue("myTextureSample", 0);
+
+    s3d_0 = new SSphere3D();
+    if (s3d_0->loadPoints(":/model/sphere.obj") ) {
+       s3d_0->dumpPoints();
+    }
 }
 
 void SGLWidget::resizeGL(int w, int h)
@@ -170,7 +177,7 @@ void SGLWidget::paintGL()
 }
 
 bool SGLWidget::prepareShaderProgram( const QString& vertexShaderPath,
-                                     const QString& fragmentShaderPath )
+                                      const QString& fragmentShaderPath )
 {
     // First we load and compile the vertex shader...
     bool result = m_shader.addShaderFromSourceFile( QGLShader::Vertex, vertexShaderPath );
