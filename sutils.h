@@ -21,6 +21,7 @@ public:
 
     static bool LoadPointsFromFile(NM_SUtils::Points & points, const char * filename);
 
+    static bool LoadFaceIndexFromFile(QList<int> & fa3, QList<int> & fa4, const char * filename);
 };
 
 

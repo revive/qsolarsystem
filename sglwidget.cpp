@@ -157,8 +157,9 @@ void SGLWidget::initializeGL()
     m_shader.setUniformValue("myTextureSample", 0);
 
     s3d_0 = new SSphere3D();
-    if (s3d_0->loadPoints(":/model/sphere.obj") ) {
+    if (s3d_0->loadObj(":/model/sphere.obj") ) {
        s3d_0->dumpPoints();
+       s3d_0->createBuffer();
     }
 }
 
