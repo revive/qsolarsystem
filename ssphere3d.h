@@ -25,6 +25,7 @@ public:
     void dumpPoints();
     void setProjectionAndViewMatrix(const QMatrix4x4 &pm, const QMatrix4x4 &vm);
     void setTexture(QGLWidget * widget);
+    void loadTexture();
 
 signals:
     

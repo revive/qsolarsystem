@@ -140,7 +140,7 @@ void SGLWidget::initializeGL()
 
     QMatrix4x4 projectionMatrix, viewMatrix, modelMatrix;
     projectionMatrix.perspective(45, 4.0/3.0, 0.1f, 10.0f);
-    viewMatrix.lookAt(QVector3D(6, 4, 3), QVector3D(0, 0, 0), QVector3D(0,1,0));
+    viewMatrix.lookAt(QVector3D(3, 0, 3), QVector3D(0, 0, 0), QVector3D(0,1,0));
     modelMatrix.scale(1.0);
     // Enable the "vertex" attribute to bind it to our currently bound
     // vertex buffer.
@@ -162,7 +162,8 @@ void SGLWidget::initializeGL()
        s3d_0->createBuffer();
        s3d_0->loadShader();
        s3d_0->setProjectionAndViewMatrix(projectionMatrix, viewMatrix);
-       s3d_0->setTexture(this);
+//       s3d_0->setTexture(this);
+       s3d_0->loadTexture();
     }
     glBindTexture(GL_TEXTURE_2D, 0);
 }
