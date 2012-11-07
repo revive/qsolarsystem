@@ -1,18 +1,15 @@
 #include "ssphere3d.h"
 #include <QDebug>
+//#include <GL/glext.h>
 
 SSphere3D::SSphere3D(QObject *parent) :
     QObject(parent),
-    mVertexBuffer(QGLBuffer::VertexBuffer)
+    mVertexBuffer(QGLBuffer::VertexBuffer),
+    mPvmMatrix()
 {
 }
 
 SSphere3D::~SSphere3D()
-{
-
-}
-
-void SSphere3D::draw() const
 {
 
 }
@@ -29,12 +26,31 @@ bool SSphere3D::loadFaces(const char *filename)
     return SUtils::LoadFaceIndexFromFile(indexFace3v, indexFace4v, filename);
 }
 
-bool SSphere3D::loadObj(const char *filename)
+bool SSphere3D::loadObj()
+{
+    QString filename(":/model/sphere.obj");
+    bool result;
+    result = loadPoints(filename.toStdString().c_str());
+    if (result)
+        result = loadFaces(filename.toStdString().c_str());
+    return result;
+}
+
+bool SSphere3D::loadShader()
 {
     bool result;
-    result = loadPoints(filename);
-    if (result)
-        result = loadFaces(filename);
+    result = mShader.addShaderFromSourceFile(QGLShader::Vertex, ":/model/sphere.vert");
+    if (!result) {
+        qWarning() << mShader.log();
+    }
+    result = mShader.addShaderFromSourceFile(QGLShader::Fragment, ":/model/sphere.frag");
+    if (!result) {
+        qWarning() << mShader.log();
+    }
+    result = mShader.link();
+    if ( !result )
+        qWarning() << "Could not link shader program:" << mShader.log();
+
     return result;
 }
 
@@ -74,3 +90,30 @@ void SSphere3D::dumpPoints()
     }
 }
 
+void SSphere3D::setProjectionAndViewMatrix(const QMatrix4x4 &pm, const QMatrix4x4 &vm)
+{
+    mPvmMatrix = mPvmMatrix * pm * vm;
+}
+
+void SSphere3D::setTexture(QGLWidget * widget)
+{
+    m_texture = widget->bindTexture(":/pic/t1.png");
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+}
+
+void SSphere3D::draw()
+{
+    if (!mShader.bind()) {
+        qWarning()<<"Bind shader failed.";
+        return;
+    }
+    mVertexBuffer.bind();
+    mShader.setAttributeBuffer("vertex", GL_FLOAT, 0, 3);
+    mShader.setUniformValue("pvmMatrix", mPvmMatrix);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+    mShader.setUniformValue("texture", 0);
+    int nFace3 = indexFace3v.size()/3;
+    glDrawArrays( GL_TRIANGLES, 0, nFace3*3 );
+    int nFace4 = indexFace4v.size()/4;
+    glDrawArrays( GL_QUADS, nFace3*3, nFace4 * 4);
+}

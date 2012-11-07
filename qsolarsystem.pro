@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QT      += opengl
 
-TARGET = qsolorsystem
+TARGET = qsolarsystem
 TEMPLATE = app
 
 
@@ -31,7 +31,9 @@ OTHER_FILES += \
     simple.vert \
     simple.frag \
     pic/t1.png \
-    model/sphere.obj
+    model/sphere.obj \
+    model/sphere.frag \
+    model/sphere.vert
 
 RESOURCES += \
     resource.qrc

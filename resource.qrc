@@ -4,5 +4,7 @@
         <file>simple.vert</file>
         <file>pic/t1.png</file>
         <file>model/sphere.obj</file>
+        <file>model/sphere.frag</file>
+        <file>model/sphere.vert</file>
     </qresource>
 </RCC>

@@ -140,7 +140,7 @@ void SGLWidget::initializeGL()
 
     QMatrix4x4 projectionMatrix, viewMatrix, modelMatrix;
     projectionMatrix.perspective(45, 4.0/3.0, 0.1f, 10.0f);
-    viewMatrix.lookAt(QVector3D(4, 3, 3), QVector3D(0, 0, 0), QVector3D(0,1,0));
+    viewMatrix.lookAt(QVector3D(6, 4, 3), QVector3D(0, 0, 0), QVector3D(0,1,0));
     modelMatrix.scale(1.0);
     // Enable the "vertex" attribute to bind it to our currently bound
     // vertex buffer.
@@ -157,10 +157,14 @@ void SGLWidget::initializeGL()
     m_shader.setUniformValue("myTextureSample", 0);
 
     s3d_0 = new SSphere3D();
-    if (s3d_0->loadObj(":/model/sphere.obj") ) {
-       s3d_0->dumpPoints();
+    if (s3d_0->loadObj() ) {
+//       s3d_0->dumpPoints();
        s3d_0->createBuffer();
+       s3d_0->loadShader();
+       s3d_0->setProjectionAndViewMatrix(projectionMatrix, viewMatrix);
+       s3d_0->setTexture(this);
     }
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void SGLWidget::resizeGL(int w, int h)
@@ -174,7 +178,9 @@ void SGLWidget::paintGL()
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     // Draw stuff
-    glDrawArrays( GL_TRIANGLES, 0, 12*3 );
+    s3d_0->draw();
+//    m_shader.bind();
+//    glDrawArrays( GL_TRIANGLES, 0, 12*3 );
 }
 
 bool SGLWidget::prepareShaderProgram( const QString& vertexShaderPath,

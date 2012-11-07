@@ -6,6 +6,8 @@
 #include <QColor>
 #include <QGLBuffer>
 #include <QGLShaderProgram>
+#include <QGLWidget>
+#include <QMatrix4x4>
 #include "sutils.h"
 
 class SSphere3D : public QObject
@@ -14,12 +16,15 @@ class SSphere3D : public QObject
 public:
     explicit SSphere3D(QObject *parent = 0);
     ~SSphere3D();
-    void draw() const;
+    void draw();
 
-    bool loadObj(const char * filename);
+    bool loadObj();
+    bool loadShader();
     bool createBuffer();
 
     void dumpPoints();
+    void setProjectionAndViewMatrix(const QMatrix4x4 &pm, const QMatrix4x4 &vm);
+    void setTexture(QGLWidget * widget);
 
 signals:
     
@@ -38,6 +43,8 @@ private:
     QList<int> indexFace4v;
     QGLBuffer mVertexBuffer;
     QGLShaderProgram mShader;
+    QMatrix4x4 mPvmMatrix;
+    GLuint m_texture;
 };
 
 #endif // SSPHERE3D_H
