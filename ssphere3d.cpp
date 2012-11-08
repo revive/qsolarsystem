@@ -1,5 +1,6 @@
 #include "ssphere3d.h"
 #include <QDebug>
+#include <QImage>
 //#include <GL/glext.h>
 
 SSphere3D::SSphere3D(QObject *parent) :
@@ -24,6 +25,12 @@ bool SSphere3D::loadFaces(const char *filename)
 {
     using namespace NM_SUtils;
     return SUtils::LoadFaceIndexFromFile(indexFace3v, indexFace4v, filename);
+}
+
+bool SSphere3D::loadNormals(const char *filename)
+{
+    using namespace NM_SUtils;
+    return SUtils::LoadNormalsFromFile(normals, filename);
 }
 
 bool SSphere3D::loadObj()
@@ -99,6 +106,21 @@ void SSphere3D::setTexture(QGLWidget * widget)
 {
     m_texture = widget->bindTexture(":/pic/t1.png");
     glBindTexture(GL_TEXTURE_2D, m_texture);
+}
+
+void SSphere3D::loadTexture()
+{
+    QImage image(":/pic/wm.png");
+    image = image.convertToFormat(QImage::Format_ARGB32);
+    glGenTextures(1, &m_texture);
+    qWarning()<<m_texture;
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, image.width(), image.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bits());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void SSphere3D::draw()

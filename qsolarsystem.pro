@@ -33,7 +33,8 @@ OTHER_FILES += \
     pic/t1.png \
     model/sphere.obj \
     model/sphere.frag \
-    model/sphere.vert
+    model/sphere.vert \
+    pic/wm.png
 
 RESOURCES += \
     resource.qrc

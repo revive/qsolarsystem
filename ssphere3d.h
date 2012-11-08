@@ -25,6 +25,7 @@ public:
     void dumpPoints();
     void setProjectionAndViewMatrix(const QMatrix4x4 &pm, const QMatrix4x4 &vm);
     void setTexture(QGLWidget * widget);
+    void loadTexture();
 
 signals:
     
@@ -33,15 +34,18 @@ public slots:
 private:
     bool loadPoints(const char * filename);
     bool loadFaces(const char * filename);
+    bool loadNormals(const char * filename);
 
 
     QVector3D center;
     double radius;
     QColor color;
     NM_SUtils::Points points;
+    NM_SUtils::Points normals;
     QList<int> indexFace3v;
     QList<int> indexFace4v;
     QGLBuffer mVertexBuffer;
+    QGLBuffer mNormalBuffer;
     QGLShaderProgram mShader;
     QMatrix4x4 mPvmMatrix;
     GLuint m_texture;

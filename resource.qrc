@@ -6,5 +6,6 @@
         <file>model/sphere.obj</file>
         <file>model/sphere.frag</file>
         <file>model/sphere.vert</file>
+        <file>pic/wm.png</file>
     </qresource>
 </RCC>
