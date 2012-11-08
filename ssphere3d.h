@@ -43,7 +43,9 @@ private:
     NM_SUtils::Points points;
     NM_SUtils::Points normals;
     QList<int> indexFace3v;
+    QList<int> indexFace3n;
     QList<int> indexFace4v;
+    QList<int> indexFace4n;
     QGLBuffer mVertexBuffer;
     QGLBuffer mNormalBuffer;
     QGLShaderProgram mShader;

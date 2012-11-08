@@ -56,6 +56,37 @@ bool SUtils::LoadFaceIndexFromFile(QList<int> &fa3, QList<int> &fa4, const char 
     return true;
 }
 
+bool SUtils::LoadFaceIndexFromFile(QList<int> &fa3, QList<int> &va3, QList<int> &fa4, QList<int> &va4, const char *filename)
+{
+    QFile f(filename);
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() <<"Open " << filename << "failed.";
+        return false;
+    }
+    while (!f.atEnd()) {
+        QByteArray line = f.readLine();
+        if (line.startsWith("f ")) {
+            line.chop(1);
+            QList<QByteArray> list = line.split(' ');
+            if (list.size()==4) {
+                for (int i=1; i<4; ++i) {
+                    QList<QByteArray> val = list[i].split('/');
+                    fa3.append(val[0].toInt());
+                    va3.append(val[2].toInt());
+                }
+            } else {
+                for (int i=1; i<5; ++i) {
+                    QList<QByteArray> val = list[i].split('/');
+                    fa4.append(val[0].toInt());
+                    va4.append(val[2].toInt());
+                }
+            }
+        }
+    }
+    f.close();
+    return true;
+}
+
 bool SUtils::LoadNormalsFromFile(Points &points, const char *filename)
 {
     QFile f(filename);
