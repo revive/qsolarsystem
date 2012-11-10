@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QGLBuffer>
 #include <QGLShaderProgram>
+#include <QTimer>
 
 #include "ssphere3d.h"
 
@@ -17,6 +18,7 @@ public:
 signals:
     
 public slots:
+    void update();
     
 protected:
     virtual void initializeGL();
@@ -31,6 +33,8 @@ private:
     GLuint m_texture;
 
     SSphere3D * s3d_0;
+    QTimer * m_timer;
+    double m_angle;
 };
 
 #endif // SGLWIDGET_H

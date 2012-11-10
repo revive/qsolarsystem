@@ -26,6 +26,8 @@ public:
     void setProjectionAndViewMatrix(const QMatrix4x4 &pm, const QMatrix4x4 &vm);
     void setTexture(QGLWidget * widget);
     void loadTexture();
+    void setAxialTilt(double angle);
+    void rotate(double angle);
 
 signals:
     
@@ -49,7 +51,11 @@ private:
     QGLBuffer mVertexBuffer;
     QGLBuffer mNormalBuffer;
     QGLShaderProgram mShader;
-    QMatrix4x4 mPvmMatrix;
+    QGLBuffer mIndexBuffer;
+    QMatrix4x4 mProjectionMatrix;
+    QMatrix4x4 mViewMatrix;
+    QMatrix4x4 mModelMatrix;
+    double m_axialTilt;
     GLuint m_texture;
 };
 

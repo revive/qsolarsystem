@@ -5,16 +5,29 @@ SGLWidget::SGLWidget(const QGLFormat &format, QWidget *parent) :
     QGLWidget(format, parent),
     m_vertexBuffer(QGLBuffer::VertexBuffer),
     m_uvBuffer(QGLBuffer::VertexBuffer),
-    s3d_0(0)
+    s3d_0(0),
+    m_angle(0)
 {
+
 }
 
 SGLWidget::SGLWidget(QWidget *parent) :
     QGLWidget(parent),
     m_vertexBuffer(QGLBuffer::VertexBuffer),
     m_uvBuffer(QGLBuffer::VertexBuffer),
-    s3d_0(0)
+    s3d_0(0),
+    m_angle(0)
 {
+
+}
+
+void SGLWidget::update()
+{
+    m_angle+=1;
+    if(m_angle >=360)
+        m_angle -= 360;
+    s3d_0->rotate(m_angle);
+    updateGL();
 }
 
 void SGLWidget::initializeGL()
@@ -24,6 +37,9 @@ void SGLWidget::initializeGL()
         qWarning() << "Could not enable sample buffers";
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_ALPHA_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Set the clear color to black
     glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 
@@ -140,7 +156,7 @@ void SGLWidget::initializeGL()
 
     QMatrix4x4 projectionMatrix, viewMatrix, modelMatrix;
     projectionMatrix.perspective(45, 4.0/3.0, 0.1f, 10.0f);
-    viewMatrix.lookAt(QVector3D(3, 0, 3), QVector3D(0, 0, 0), QVector3D(0,1,0));
+    viewMatrix.lookAt(QVector3D(0, 0, 5), QVector3D(0, 0, 0), QVector3D(0,1,0));
     modelMatrix.scale(1.0);
     // Enable the "vertex" attribute to bind it to our currently bound
     // vertex buffer.
@@ -166,6 +182,9 @@ void SGLWidget::initializeGL()
        s3d_0->loadTexture();
     }
     glBindTexture(GL_TEXTURE_2D, 0);
+    m_timer = new QTimer(this);
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(update()));
+    m_timer->start(40);
 }
 
 void SGLWidget::resizeGL(int w, int h)

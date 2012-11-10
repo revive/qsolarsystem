@@ -2,11 +2,13 @@
 
 in vec3 vertex;
 
-uniform mat4 pvmMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
+uniform mat4 modelMatrix;
 
 out vec3 texCoords;
 void main(void)
 {
-    gl_Position = pvmMatrix * vec4(normalize(vertex), 1.0);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex, 1.0);
     texCoords = normalize(vertex);
 }

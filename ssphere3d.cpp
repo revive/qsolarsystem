@@ -3,11 +3,21 @@
 #include <QImage>
 #include <GL/glext.h>
 
+#include "math.h"
+
+const double pi = 4.0 * atan(1.0);
 SSphere3D::SSphere3D(QObject *parent) :
     QObject(parent),
     mVertexBuffer(QGLBuffer::VertexBuffer),
-    mPvmMatrix()
+    mNormalBuffer(QGLBuffer::VertexBuffer),
+    mIndexBuffer(QGLBuffer::IndexBuffer),
+    mProjectionMatrix(),
+    mViewMatrix(),
+    mModelMatrix()
 {
+    m_axialTilt = 23.0 + 26.0/60.0;
+    qWarning()<<m_axialTilt;
+    mModelMatrix.rotate(m_axialTilt, 0, 0, -1);
 }
 
 SSphere3D::~SSphere3D()
@@ -120,7 +130,8 @@ void SSphere3D::dumpPoints()
 
 void SSphere3D::setProjectionAndViewMatrix(const QMatrix4x4 &pm, const QMatrix4x4 &vm)
 {
-    mPvmMatrix = mPvmMatrix * pm * vm;
+    mProjectionMatrix = pm;
+    mViewMatrix = vm;
 }
 
 void SSphere3D::setTexture(QGLWidget * widget)
@@ -144,6 +155,18 @@ void SSphere3D::loadTexture()
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void SSphere3D::setAxialTilt(double angle)
+{
+    m_axialTilt = angle;
+}
+
+void SSphere3D::rotate(double angle)
+{
+    mModelMatrix.setToIdentity();
+    mModelMatrix.rotate(m_axialTilt, 0, 0, -1);
+    mModelMatrix.rotate(angle, 0, 1, 0);
+}
+
 void SSphere3D::draw()
 {
     if (!mShader.bind()) {
@@ -156,7 +179,10 @@ void SSphere3D::draw()
     mNormalBuffer.bind();
     mShader.setAttributeBuffer("normal", GL_FLOAT, 0, 3);
     mShader.enableAttributeArray("normal");
-    mShader.setUniformValue("pvmMatrix", mPvmMatrix);
+    mShader.setUniformValue("projectionMatrix", mProjectionMatrix);
+    mShader.setUniformValue("viewMatrix", mViewMatrix);
+    mShader.setUniformValue("modelMatrix", mModelMatrix);
+
     glBindTexture(GL_TEXTURE_2D, m_texture);
     mShader.setUniformValue("texture", 0);
     int nFace3 = indexFace3v.size()/3;
